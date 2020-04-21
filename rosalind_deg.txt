@@ -1,0 +1,31 @@
+public static String graphDegree(ArrayList <String>s){
+      HashMap<Integer,Integer> degree = new HashMap<>();
+      String ins="";
+      String graph_Data="";
+      graph_Data= s.get(0);
+      String Data[]=graph_Data.split(" ");
+      int vertices = Integer.parseInt(Data[0]);
+      int edges = Integer.parseInt(Data[1]);
+      for(int i=1;i<=edges;i++){
+          ins=s.get(i);
+          String graph[]=ins.split(" ");
+          for(int j=0;j<2;j++){
+              int vertex = Integer.parseInt(graph[j]);
+              if(!degree.containsKey(vertex)){
+                  degree.put(vertex,1);
+              }
+              else{
+                  int temp= degree.get(vertex);
+                  temp+=1;
+                  degree.replace(vertex,temp);
+              }
+          }
+      }
+      String ans="";
+      System.out.println(degree);
+      for(int i=1;i<=vertices;i++){
+          ans+=degree.get(i);
+          ans+=" ";
+      }
+      return ans;
+    }

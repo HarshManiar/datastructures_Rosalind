@@ -1,0 +1,66 @@
+public static HashMap<Integer,Integer> degree(ArrayList<String>s){
+        HashMap<Integer,Integer> degree = new HashMap<>();
+        String ins="";
+        String graph_Data="";
+        graph_Data= s.get(0);
+        String Data[]=graph_Data.split(" ");
+        int vertices = Integer.parseInt(Data[0]);
+        int edges = Integer.parseInt(Data[1]);
+        for(int i=1;i<=edges;i++){
+            ins=s.get(i);
+            String graph[]=ins.split(" ");
+            for(int j=0;j<2;j++){
+                int vertex = Integer.parseInt(graph[j]);
+                if(!degree.containsKey(vertex)){
+                    degree.put(vertex,1);
+                }
+                else{
+                    int temp= degree.get(vertex);
+                    temp+=1;
+                    degree.replace(vertex,temp);
+                }
+            }
+        }
+        return degree;
+    }
+    public static String neighbour(ArrayList<String>s){
+        HashMap<Integer,Integer>degrees = new HashMap<>();
+        HashMap<Integer,Integer>neighbour = new HashMap<>();
+        degrees = degree(s);
+        String raw_inst = s.get(0);
+        String str_inst[]=raw_inst.split(" ");
+        int vertices = Integer.parseInt(str_inst[0]);
+        int matrix[][] = new int[vertices+1][vertices+1];
+        int edge_count = Integer.parseInt(str_inst[1]);
+        for(int i=1;i<edge_count+1;i++){
+           String temp = s.get(i);
+           String tp[]= temp.split(" ");
+           int a = Integer.parseInt(tp[0]);
+           int b = Integer.parseInt(tp[1]);
+           matrix[a][b]=1;
+           matrix[b][a]=1;
+        }
+        for(int i=0;i<vertices+1;i++){
+            for(int j=0;j<vertices+1;j++){
+                if(matrix[i][j]==1){
+                    if(!neighbour.containsKey(i)){
+                        neighbour.put(i,degrees.get(j));
+                    }
+                    else{
+                        int temp=neighbour.get(i);
+                        temp+=degrees.get(j);
+                        neighbour.replace(i,temp);
+                    }
+                }
+            }
+        }
+        String ans="";
+        for(int i=1;i<vertices+1;i++){
+            if(!neighbour.containsKey(i)){
+                neighbour.put(i,0);
+            }
+            ans+=neighbour.get(i);
+            ans+=" ";
+        }
+        return ans;
+    }

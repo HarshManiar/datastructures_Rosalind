@@ -1,0 +1,51 @@
+public static String median(ArrayList<String>s){
+        String ans="";
+        int n=Integer.parseInt(s.get(0));
+        int k=Integer.parseInt(s.get(2));
+        String temp=s.get(1);
+        int ar[]=new int[n];
+        String val[]= temp.split(" ");
+        for(int i=0;i<n;i++){
+            ar[i]=Integer.parseInt(val[i]);
+        }
+        Arrays.sort(ar);
+        ans+=ar[k-1];
+        ans+=" ";
+        return ans;
+    }
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_med.txt");
+        String ans=median(instructions);
+        emitOutput(ans);
+    }
+
+}

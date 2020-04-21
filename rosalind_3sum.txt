@@ -1,0 +1,95 @@
+public static int[] CheckthreeSum(String []val, int n){
+        HashMap<Integer,Integer>pos = new HashMap<>();
+        int ar[]= new int[n];
+        for(int q=0;q<n;q++){
+            ar[q] = Integer.parseInt(val[q]);
+            if(!pos.containsKey(ar[q])) {
+                pos.put(ar[q], q + 1);
+            }
+        }
+        //System.out.println(pos);
+        Arrays.sort(ar);
+        int ans[]={-1,0,0};
+        for(int i=0;i<n-2;i++){
+            int l=i+1;
+            int r=n-1;
+            while(l<r){
+                int sum=ar[i]+ar[l]+ar[r];
+                if(sum==0){
+                    ans= new int[]{pos.get(ar[i]), pos.get(ar[l]), pos.get(ar[r])};
+                    Arrays.sort(ans);
+                    return ans;
+                }
+                else if(sum<0){
+                    l+=1;
+                }
+                else{
+                    r-=1;
+                }
+            }
+        }
+        return ans;
+    }
+    public static String threeSum(ArrayList<String>s){
+        String res="";
+        String temp= s.get(0);
+        String ins[] = temp.split(" ");
+        int k=Integer.parseInt(ins[0]);
+        int n=Integer.parseInt(ins[1]);
+        for(int i=1;i<=k;i++){
+            String temp2 = s.get(i);
+            String val[] = temp2.split(" ");
+            int ans[]=new int[3];
+            ans=CheckthreeSum(val,n);
+            if(ans[0]!=-1){
+                res+=ans[0];
+                res+=" ";
+                res+=ans[1];
+                res+=" ";
+                res+=ans[2];
+                res+="\n";
+            }
+            else{
+                res+=ans[0];
+                res+="\n";
+            }
+        }
+        return res;
+    }
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_3sum.txt");
+        String ans=threeSum(instructions);
+        emitOutput(ans);
+    }
+
+}

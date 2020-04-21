@@ -1,0 +1,24 @@
+public static String insertionSort(ArrayList<String>s){
+        int counter=0;
+        String ans="";
+        String size_string = s.get(0);
+        String array_string = s.get(1);
+        int size=Integer.parseInt(size_string);
+        String array[]=array_string.split(" ");
+        int a[] = new int[size];
+        for(int i=0;i<size;i++){
+            a[i] = Integer.parseInt(array[i]);
+        }
+        for(int j=1;j<size;j++){
+            int k=j;
+            while((k>0)&&(a[k]<a[k-1])){
+                int temp=a[k-1];
+                a[k-1]=a[k];
+                a[k]=temp;
+                counter+=1;
+                k-=1;
+            }
+        }
+        ans+=Integer.toString(counter);
+        return ans;
+    }

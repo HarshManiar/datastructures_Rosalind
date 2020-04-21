@@ -1,0 +1,21 @@
+public static String inversion(ArrayList<String>s){
+        String one= s.get(0);
+        String ans="";
+        int size=Integer.parseInt(one);
+        int a[] = new int[size];
+        String two=s.get(1);
+        String[]temp =two.split(" ");
+        for(int i=0;i<temp.length;i++){
+            a[i] = Integer.parseInt(temp[i]);
+        }
+        int inversion=0;
+        for(int j=0;j<size;j++){
+            for(int k=j+1;k<size;k++){
+                if(a[j]>a[k]){
+                    inversion+=1;
+                }
+            }
+        }
+        ans+=inversion;
+        return ans;
+    }

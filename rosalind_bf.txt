@@ -1,0 +1,78 @@
+public static void update(int u, int v, HashMap<Integer,Double>distance, HashMap<Double,Integer>weights){
+        double edgeKey=(1000*u)+v;
+        double val = Math.min(distance.get(v),(distance.get(u)+weights.get(edgeKey)));
+        distance.replace(v,val);
+    }
+    public static String BellmanFord(ArrayList<String>s){
+        String ans="";
+        int vertices = vertice(s);
+        int edges = edge_count(s);
+        int matrix[][];
+        HashMap<Double,Integer>weights = new HashMap<>();
+        matrix =setup_DirectedWeighted(s,vertices,edges,weights);
+
+        HashMap<Integer,Double>distance = new HashMap<>();
+        for(int i=1;i<=vertices;i++){
+            distance.put(i,Double.POSITIVE_INFINITY);
+        }
+        distance.replace(1,0.0);
+        for(int i=1;i<vertices-1;i++){
+            for(int u=1;u<=vertices;u++){
+                for(int v=1;v<=vertices;v++){
+                    if(matrix[u-1][v-1]==1){
+                        update(u,v,distance,weights);
+                    }
+                }
+            }
+        }
+        for(int i=1;i<=distance.size();i++){
+            if(distance.get(i)==Double.POSITIVE_INFINITY){
+                ans+="x";
+            }
+            else{
+                double dis = distance.get((i));
+                int dist = (int)(dis);
+                ans+=dist;
+            }
+            ans+=" ";
+        }
+        return ans;
+    }
+
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_bf.txt");
+        String ans=BellmanFord(instructions);
+        emitOutput(ans);
+    }
+
+}

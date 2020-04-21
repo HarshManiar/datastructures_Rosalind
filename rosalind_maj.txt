@@ -1,0 +1,49 @@
+ public static Integer major(int nums[]){
+        int major_index=0;
+        int count=1;
+        for(int i=1;i<nums.length;i++){
+            if(nums[major_index] == nums[i]){
+                count++;
+            }
+            else{
+                count--;
+            }
+            if(count==0){
+                major_index=i;
+                count=1;
+            }
+        }
+        int candidate = nums[major_index];
+        int counter=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==candidate){
+                counter+=1;
+            }
+        }
+        if(counter > nums.length/2){
+            return nums[major_index];
+        }
+        else{
+            return -1;
+        }
+    }
+    public static String major_element(ArrayList<String>s){
+        String raw_inst = s.get(0);
+        String ans="";
+        String str_inst[]=raw_inst.split(" ");
+        int no_arrays = Integer.parseInt(str_inst[0]);
+        int array_size= Integer.parseInt(str_inst[1]);
+        for(int i=1;i<=no_arrays;i++){
+            String temp = s.get(i);
+            //System.out.println(temp);
+            ArrayList<Integer>res = new ArrayList<>();
+            String tp[] = temp.split(" ");
+            int nums[]=new int[array_size];
+            for(int q=0;q<tp.length;q++){
+                nums[q]=Integer.parseInt(tp[q]);
+            }
+            ans+=Integer.toString(major(nums));
+            ans+=" ";
+        }
+        return ans;
+    }

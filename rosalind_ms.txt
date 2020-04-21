@@ -1,0 +1,94 @@
+public static void mergeSort(int[]a,int low,int high){
+        if(low<high){
+            int mid = (low+high)/2;
+            mergeSort(a,low,mid);
+            mergeSort(a,mid+1,high);
+            merge(a,low,mid,high);
+        }
+    }
+    public static void merge(int a[], int low, int mid, int high) {
+        int temp[] = new int[high - low + 1];
+        int i = low;
+        int j = mid+1;
+        int k = 0;
+        while(i <= mid && j <= high) {
+            if(a[i] <= a[j]) {
+                temp[k] = a[i];
+                k += 1;
+                i += 1;
+            }
+            else {
+                temp[k] = a[j];
+                k += 1;
+                j += 1;
+            }
+        }
+
+        while(j <= high) {
+            temp[k] = a[j];
+            k += 1;
+            j += 1;
+        }
+        while(i <= mid) {
+            temp[k] = a[i];
+            k += 1;
+            i += 1;
+        }
+        for(i = low; i <= high; i += 1) {
+            a[i] = temp[i - low];
+        }
+    }
+    public static String MergeSortFin(ArrayList<String>s){
+        String ans="";
+        int n=Integer.parseInt(s.get(0));
+        String temp = s.get(1);
+        String ins[]=temp.split(" ");
+        int a[]=new int[n];
+        for(int i=0;i<n;i++){
+            a[i] = Integer.parseInt(ins[i]);
+        }
+        mergeSort(a,0,n-1);
+        for(int i=0;i<n;i++){
+            ans+=a[i];
+            ans+=" ";
+        }
+        return ans;
+    }
+
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_ms.txt");
+        String ans=MergeSortFin(instructions);
+        emitOutput(ans);
+    }
+
+}

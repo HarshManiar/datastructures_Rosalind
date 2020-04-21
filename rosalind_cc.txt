@@ -1,0 +1,58 @@
+public static void explore(int u,int matrix[][],HashMap<Integer,Boolean>visited,int vertices){
+        visited.replace(u,true);
+        for(int j=0;j<vertices;j++){
+            if(matrix[u-1][j]==1){
+                if(visited.get(j+1)==false){
+                    explore(j+1,matrix,visited,vertices);
+                }
+            }
+        }
+    }
+    public static String connected(ArrayList<String>s){
+        int count=0;
+        String ans="";
+        int vertices = vertice(s);
+        int edges = edge_count(s);
+        int matrix[][];
+        matrix =setup_ADJmatrix(s,vertices,edges);
+        HashMap<Integer,Boolean>visited = new HashMap<>();
+        for(int i=1;i<=vertices;i++){
+            visited.put(i,false);
+        }
+        for(int i=1;i<=vertices;i++){
+            if(visited.get(i)==false){
+                count+=1;
+                explore(i,matrix,visited,vertices);
+            }
+        }
+        ans+=count;
+        return ans;
+    }
+
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }

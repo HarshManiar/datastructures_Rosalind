@@ -1,0 +1,50 @@
+    public static String sortedArray(ArrayList<String>s){
+        //DATA GATHERING
+        String one=s.get(0);
+        String two=s.get(1);
+        String three=s.get(2);
+        String four=s.get(3);
+        int n= Integer.parseInt(one);
+        int m=Integer.parseInt(three);
+        int a[] = new int[n];
+        int b[] = new int[m];
+        int o[] = new int[n+m];
+        String tres[]=two.split(" ");
+        String quater[]=four.split(" ");
+        for(int i=0;i<tres.length;i++) {
+            a[i] = Integer.parseInt(tres[i]);
+        }
+        for(int j=0;j<quater.length;j++) {
+            b[j] = Integer.parseInt(quater[j]);
+        }
+        //REAL ALGO
+        int r=0;
+        int q=0;
+        while((r+q)<(m+n)){
+            int x=r+q;
+            if(q>=m){
+                o[x]=a[r];
+                break;
+            }
+            if(r>=n){
+                o[x]=b[q];
+                break;
+            }
+            int num=0;
+            if(a[r]>b[q]){
+                num=b[q];
+                q+=1;
+            }
+            else{
+                num=a[r];
+                r+=1;
+            }
+            o[x]=num;
+        }
+        String ans="";
+        for(int i=0;i<n+m;i++){
+            ans+=Integer.toString(o[i]);
+            ans+=" ";
+        }
+        return ans;
+    }

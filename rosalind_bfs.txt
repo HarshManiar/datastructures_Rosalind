@@ -1,0 +1,86 @@
+public static String bfs(ArrayList<String>s){
+        String ans="";
+        HashMap<Integer,Integer>distance = new HashMap<>();
+        Queue<Integer>q = new LinkedList<>();
+        int inf = Integer.MAX_VALUE;
+        String raw_inst = s.get(0);
+        String str_inst[]=raw_inst.split(" ");
+        int vertices = Integer.parseInt(str_inst[0]);
+        int matrix[][] = new int[vertices+1][vertices+1];
+        int edge_count = Integer.parseInt(str_inst[1]);
+        for(int i=1;i<edge_count+1;i++){
+            String temp = s.get(i);
+            String tp[]= temp.split(" ");
+            int a = Integer.parseInt(tp[0]);
+            int b = Integer.parseInt(tp[1]);
+            matrix[a-1][b-1]=1;
+        }
+
+        //BFS ALGO
+        for(int i=1;i<=vertices;i++){
+            distance.put(i,inf);
+        }
+
+        distance.replace(1,0);
+        q.add(1);
+        while (!q.isEmpty()){
+            int u = q.remove();
+            for(int v=0;v<vertices;v++){
+                if(matrix[u-1][v]==1){
+                    if(distance.get(v+1) == inf){
+                        q.add(v+1);
+                        distance.replace(v+1,distance.get(u)+1);
+                    }
+                }
+            }
+        }
+        int element=1;
+        while(!distance.isEmpty()){
+            int dis = distance.get(element);
+            if(dis==inf){
+                ans+=-1;
+            }
+            else{
+                ans+=dis;
+            }
+            ans+=" ";
+            distance.remove(element);
+            element+=1;
+        }
+        return ans;
+    }
+
+
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_bfs.txt");
+        String ans= bfs(instructions);
+       emitOutput(ans);
+    }

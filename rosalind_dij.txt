@@ -1,0 +1,111 @@
+public static int[][] setup_DirectedWeighted(ArrayList<String>s,int vertices, int edge_count,HashMap<Integer,Integer>weight){
+        int matrix[][] = new int[vertices+1][vertices+1];
+        for(int i=1;i<edge_count+1;i++){
+            String temp = s.get(i);
+            String tp[]= temp.split(" ");
+            int a = Integer.parseInt(tp[0]);
+            int b = Integer.parseInt(tp[1]);
+            int w= Integer.parseInt(tp[2]);
+            int edgeKey=(a*1000)+b;
+            weight.put(edgeKey,w);
+            matrix[a-1][b-1]=1;
+        }
+        return matrix;
+    }
+    public static int minDistance(HashMap<Integer,Integer>distance,HashSet<Integer>visited){
+        int u=-1;
+        for(int i=1;i<=distance.size();i++){
+            if(!visited.contains(i)&&((u==-1) ||(distance.get(i) < distance.get(u)))){
+                u=i;
+            }
+        }
+        return u;
+    }
+    public static String Dijkstra(ArrayList<String>s){
+        //SETTING UP GRAPH WITH WEIGHTS
+        String ans="";
+        int vertices = vertice(s);
+        int edges = edge_count(s);
+        int matrix[][];
+        HashMap<Integer,Integer>weights = new HashMap<>();
+        matrix =setup_DirectedWeighted(s,vertices,edges,weights);
+
+        //ALGO
+        HashMap<Integer,Integer>distance = new HashMap<>();
+        HashSet<Integer>visited= new HashSet<>();
+        ArrayList<Integer>q = new ArrayList<>();
+        for(int i=1;i<=vertices;i++){
+            distance.put(i,Integer.MAX_VALUE);
+            q.add(i);
+        }
+        distance.replace(1,0);
+        //System.out.println(distance);
+        while(visited.size()<vertices){
+            int u = minDistance(distance,visited);
+            visited.add(u);
+            /*System.out.println("U-->"+u);
+            System.out.println(visited);
+            System.out.println(distance);
+            System.out.println("*****************");*/
+            for(int v=1;v<=vertices;v++){
+                if(matrix[u-1][v-1]==1){
+                    //System.out.println("EDGE(U,V)-->"+"("+u+","+v+")");
+                    if(distance.get(u)==Integer.MAX_VALUE){
+                        break;
+                    }
+                    int edgeKey=((u)*1000) +v;
+                    if(distance.get(v)>(  distance.get(u)+ weights.get(edgeKey))){
+                        distance.replace(v, distance.get(u)+ weights.get(edgeKey));
+                    }
+                }
+            }
+        }
+        //System.out.println(distance);
+        for(int i=1;i<=distance.size();i++){
+            if(distance.get(i)==Integer.MAX_VALUE){
+                ans+=-1;
+            }
+            else{
+                ans+=distance.get(i);
+            }
+            ans+=" ";
+        }
+        return ans;
+    }
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_dij.txt");
+        String ans=Dijkstra(instructions);
+        emitOutput(ans);
+    }
+
+}

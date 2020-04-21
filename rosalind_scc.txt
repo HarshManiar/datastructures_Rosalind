@@ -1,0 +1,159 @@
+public static int preVisit(int v,HashMap<Integer,Integer>previst,int clock){
+        previst.put(clock,v);
+        clock+=1;
+        return clock;
+    }
+    public static int postVisit(int v,HashMap<Integer,Integer>postvist,int clock){
+        postvist.put(clock,v);
+        clock+=1;
+        return clock;
+    }
+    public static int explore(int u,int matrix[][],HashMap<Integer,Boolean>visited,int vertices,HashMap<Integer,Integer>previsit,HashMap<Integer,Integer>postvisit,int clock){
+        visited.replace(u,true);
+        clock=preVisit(u,previsit,clock);
+        for(int j=1;j<=vertices;j++){
+            if(matrix[u-1][j-1]==1){
+                if(visited.get(j)==false){
+                    clock=explore(j,matrix,visited,vertices,previsit,postvisit,clock);
+                }
+            }
+        }
+        clock=postVisit(u,postvisit,clock);
+        return clock;
+    }
+    public static String topologicalSort(ArrayList<String>s){
+        String ans="";
+        int vertices = vertice(s);
+        int edges = edge_count(s);
+        int matrix[][];
+        matrix =setup_DirectedADJmatrix(s,vertices,edges);
+        HashMap<Integer,Boolean>visited = new HashMap<>();
+        HashMap<Integer,Integer>previsit = new HashMap<>();
+        HashMap<Integer,Integer>postvisit = new HashMap<>();
+        int clock=1;
+        for(int i=1;i<=vertices;i++){
+            visited.put(i,false);
+        }
+        for(int i=1;i<=vertices;i++){
+            if(visited.get(i)==false){
+                clock=explore(i,matrix,visited,vertices,previsit,postvisit,clock);
+            }
+        }
+        while(postvisit.size()!=0){
+            if(postvisit.containsKey(clock)){
+                ans+=postvisit.get(clock);
+                ans+=" ";
+                postvisit.remove(clock);
+            }
+            else{
+                clock-=1;
+            }
+        }
+        return ans;
+    }
+    public static String SCC(ArrayList<String>s){
+        String ans="";
+        int vertices = vertice(s);
+        int edges = edge_count(s);
+        int matrix[][];
+        int transpose[][];
+        matrix =setup_DirectedADJmatrix(s,vertices,edges);
+        transpose=transPose(matrix,vertices);
+        HashMap<Integer,Boolean>visited = new HashMap<>();
+       /* print_adjMatrix(matrix,vertices);
+        System.out.println("**********");
+        print_adjMatrix(transpose,vertices);*/
+        HashMap<Integer,Integer>previsit = new HashMap<>();
+        HashMap<Integer,Integer>postvisit = new HashMap<>();
+
+        //DFS ON TRANSPOSE
+        int clock=1;
+        for(int i=1;i<=vertices;i++){
+            visited.put(i,false);
+        }
+        for(int i=1;i<=vertices;i++){
+            if(visited.get(i)==false){
+                clock=explore(i,transpose,visited,vertices,previsit,postvisit,clock);
+            }
+        }
+        /*PRINTING RESULTS
+        print_adjMatrix(transpose,vertices);
+        System.out.println(previsit);
+        System.out.println(postvisit);
+        System.out.println("**********");*/
+
+        //ORDERING VERTICES
+        ArrayList<Integer>postOrdered = new ArrayList<>();
+        while(postvisit.size()!=0){
+            if(postvisit.containsKey(clock)){
+                postOrdered.add(postvisit.get(clock));
+                postvisit.remove(clock);
+            }
+            else{
+                clock-=1;
+            }
+        }
+        /*System.out.println(postOrdered);
+        System.out.println("**********");*/
+
+        //RESETTING
+        previsit.clear();
+        visited.clear();
+        postvisit.clear();
+
+        //DFS ON G WITH POSTORDERED VERTICES
+        clock=1;
+        int count=0;
+        for(int i=0;i<postOrdered.size();i++){
+            visited.put(postOrdered.get(i),false);
+        }
+        for(int i=0;i<postOrdered.size();i++){
+            if(visited.get(postOrdered.get(i))==false){
+                count+=1;
+                clock=explore(postOrdered.get(i),matrix,visited,vertices,previsit,postvisit,clock);
+            }
+        }
+        /*print_adjMatrix(matrix,vertices);
+        System.out.println(previsit);
+        System.out.println(postvisit);
+        System.out.println("**********");*/
+        ans+=count;
+        return ans;
+    }
+
+    //INPUT & OUTPUT
+    public static ArrayList<String> inRead(String a) throws IOException {
+        String line;
+        ArrayList<String> instruction = new ArrayList<String>();
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(a);
+            br = new BufferedReader(fr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            instruction.add(line);
+        }
+        br.close();
+        if (fr != null) {
+            fr.close();
+        }
+        return instruction;
+    }
+    public static void emitOutput(String a)throws IOException{
+        PrintWriter writer = new PrintWriter("out.txt");
+        writer.println(a);
+        writer.close();
+    }
+
+
+    public static void main(String[] args) throws IOException{
+        ArrayList<String>instructions = new ArrayList<>();
+        instructions=inRead("rosalind_scc.txt");
+        String ans=SCC(instructions);
+        emitOutput(ans);
+    }
+
+}
